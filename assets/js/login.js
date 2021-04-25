@@ -65,6 +65,8 @@ $(function() {
                     return layer.msg('登陆失败！');
                 }
                 layer.msg('登录成功');
+                //将服务器拿到的token值暂存到localStorage中
+                localStorage.setItem('token', res.token);
                 location.href = '/index.html';
             }
         });
