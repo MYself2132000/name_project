@@ -1,7 +1,10 @@
 //注意，这个函数是jquery帮我们封装好的
 // 作用就是再每一次调用Ajax请求之前，对参数进行一些预处理
 $.ajaxPrefilter(function(options) {
-    options.url = 'http://www.liulongbin.top:3007' + options.url;
+    //http://api-breakingnews-web.itheima.net
+    //http://ajax.frontend.itheima.net
+    //http://www.liulongbin.top:3007
+    options.url = 'http://api-breakingnews-web.itheima.net' + options.url;
     //只有包含/my/的url才需要加token命令
     if (options.url.indexOf('/my/') !== -1) {
         options.headers = {

@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <!-- 将被隐藏掉的文件上传域 -->
+    <input type="file" id="fileElem" multiple accept="image/*" style="display:none" onchange="handleFiles(this.files)">
+    <!-- 触发文件上传的a链接 -->
+    <a href="#" id="fileSelect">Select some files</a>
+    <!-- 显示图片域 -->
+    <div id="fileList">
+        <p>No files selected!</p>
+    </div>
+    <script>
+        window.URL = window.URL || window.webkitURL;
+
+        var fileSelect = document.getElementById("fileSelect"), //获取文件上传a连接
+            fileElem = document.getElementById("fileElem"), //获取隐藏掉的文件上传域
+            fileList = document.getElementById("fileList"); //获取图片显示域
+
+        //通过点击文件上传a连接，来模拟点击了文件上传域，目的是文件上传域太丑
+        fileSelect.addEventListener("click", function(e) {
+            if (fileElem) {
+                fileElem.click();
+            }
+            //添加了一个 # 的a链接，点击了之后会跑到顶部
+            e.preventDefault(); // prevent navigation to "#"
+        }, false);
+
+        //使用change事件调用本函数，并将用户选择的 文件组传递过来
+        function handleFiles(files) {
+            //长度为0取反，图片显示域显示如下文本
+            if (!files.length) {
+                fileList.innerHTML = "<p>No files selected!</p>";
+            } else {
+                //先将文件显示域的文本定义为空
+                fileList.innerHTML = "";
+                //创建ul
+                var list = document.createElement("ul");
+                //将创建好的ul追加到文件显示域中
+                fileList.appendChild(list);
+                //遍历文件组
+                for (var i = 0; i < files.length; i++) {
+                    //创建li
+                    var li = document.createElement("li");
+                    //追加li到ul中
+                    list.appendChild(li);
+                    //创建img标签
+                    var img = document.createElement("img");
+                    //将用户上传的图片中的第i个转化为一个http连接，并赋值给img标签的src
+                    img.src = window.URL.createObjectURL(files[i]);
+                    //定义图片高
+                    img.height = 60;
+                    //当图片加载完毕后
+                    img.onload = function() {
+                            //将当前生成的src销毁掉
+                            window.URL.revokeObjectURL(this.src);
+                        }
+                        //将img标签追加到li中
+                    li.appendChild(img);
+                    //创建span标签，同时显示文件相关信息
+                    var info = document.createElement("span");
+                    info.innerHTML = files[i].name + ": " + files[i].size + " bytes";
+                    li.appendChild(info);
+                }
+            }
+        }
+    </script>
+</body>
+
+</html>
